@@ -132,7 +132,7 @@ for i in 192.168.4.{22..25}; do ssh_grant $i; done
 ###### ... for secondory boards.
 ###### Connect to OrangePI 2 and run installation
 
-for i in 192.168.4.{22..25}; do ssh_inijection $i; done
+for i in 192.168.4.{22..25}; do ssh_injection $i; done
 
 
 
