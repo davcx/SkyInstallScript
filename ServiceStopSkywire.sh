@@ -17,6 +17,5 @@
 ##### This stops the Skywire node
 ps aux | grep manager | grep -v grep | awk '{ print $2 }' | xargs kill -9
 
-
 ###### This stops the Skywire monitor
 ps aux | grep node | grep -v grep | awk '{ print $2 }' | xargs kill -9

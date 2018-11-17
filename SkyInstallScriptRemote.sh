@@ -98,7 +98,23 @@ is_alive_ping()
                 fi
   fi
 }
-for i in 192.168.0.{102..108}; do is_alive_ping $i; done
+
+ssh_grant()
+{
+ ssh-keyscan -H $1 >> ~/.ssh/known_hosts
+}
+
+ssh_injection()
+{
+ ###### Connect to OrangePI 2 and run installation
+ sshpass -p $RootPassword ssh root@$1 << EOF
+sudo wget https://raw.githubusercontent.com/davcx/SkyInstallScript/master/SkyInstallScriptSecondary.sh
+sudo chmod 755 ~/SkyInstallScriptSecondary.sh;
+sudo sh ~/SkyInstallScriptSecondary.sh &&  exit
+EOF
+}
+
+for i in 192.168.4.{22..25}; do is_alive_ping $i; done
 
 
 ###### Install sshpass in order to login to OrangePI boards 2-8 using ssh
@@ -109,58 +125,16 @@ sudo mkdir ~/.ssh/
 sudo touch ~/.ssh/known_hosts
 
 ###### Scan and add keys to trusted list
-ssh-keyscan -H 192.168.0.102 >> ~/.ssh/known_hosts
-ssh-keyscan -H 192.168.0.103 >> ~/.ssh/known_hosts
-ssh-keyscan -H 192.168.0.104 >> ~/.ssh/known_hosts
-ssh-keyscan -H 192.168.0.105 >> ~/.ssh/known_hosts
-ssh-keyscan -H 192.168.0.106 >> ~/.ssh/known_hosts
-ssh-keyscan -H 192.168.0.107 >> ~/.ssh/known_hosts
-ssh-keyscan -H 192.168.0.108 >> ~/.ssh/known_hosts
+for i in 192.168.4.{22..25}; do ssh_grant $i; done
+
 
 ###### In order to automatically install OrangePI 2-8 we need to login via SSH and run the SkyInstallScript...
 ###### ... for secondory boards.
 ###### Connect to OrangePI 2 and run installation
-sshpass -p $RootPassword ssh root@192.168.0.102 << EOF
-sudo wget https://raw.githubusercontent.com/TheSKYpeople/SkyInstallScript/master/SkyInstallScriptSecondary.sh
-sudo chmod 755 ~/SkyInstallScriptSecondary.sh;
-sudo sh ~/SkyInstallScriptSecondary.sh &&  exit
-EOF
-###### Connect to OrangePI 3 and run installation
-sshpass -p $RootPassword ssh root@192.168.0.103 << EOF
-sudo wget https://raw.githubusercontent.com/TheSKYpeople/SkyInstallScript/master/SkyInstallScriptSecondary.sh
-sudo chmod 755 ~/SkyInstallScriptSecondary.sh;
-sudo sh ~/SkyInstallScriptSecondary.sh &&  exit
-EOF
-###### Connect to OrangePI 4 and run installation
-sshpass -p $RootPassword ssh root@192.168.0.104 << EOF
-sudo wget https://raw.githubusercontent.com/TheSKYpeople/SkyInstallScript/master/SkyInstallScriptSecondary.sh
-sudo chmod 755 ~/SkyInstallScriptSecondary.sh;
-sudo sh ~/SkyInstallScriptSecondary.sh &&  exit
-EOF
-###### Connect to OrangePI 5 and run installation
-sshpass -p $RootPassword ssh root@192.168.0.105 << EOF
-sudo wget https://raw.githubusercontent.com/Warmat/SkyInstallScript/master/SkyInstallScriptSecondary.sh
-sudo chmod 755 ~/SkyInstallScriptSecondary.sh;
-sudo sh ~/SkyInstallScriptSecondary.sh &&  exit
-EOF
-###### Connect to OrangePI 6 and run installation
-sshpass -p $RootPassword ssh root@192.168.0.106 << EOF
-sudo wget https://raw.githubusercontent.com/TheSKYpeople/SkyInstallScript/master/SkyInstallScriptSecondary.sh
-sudo chmod 755 ~/SkyInstallScriptSecondary.sh;
-sudo sh ~/SkyInstallScriptSecondary.sh &&  exit
-EOF
-###### Connect to OrangePI 7 and run installation
-sshpass -p $RootPassword ssh root@192.168.0.107 << EOF
-sudo wget https://raw.githubusercontent.com/TheSKYpeople/SkyInstallScript/master/SkyInstallScriptSecondary.sh
-sudo chmod 755 ~/SkyInstallScriptSecondary.sh;
-sudo sh ~/SkyInstallScriptSecondary.sh &&  exit
-EOF
-###### Connect to OrangePI 8 and run installation
-sshpass -p $RootPassword ssh root@192.168.0.108 << EOF
-sudo wget https://raw.githubusercontent.com/TheSKYpeople/SkyInstallScript/master/SkyInstallScriptSecondary.sh
-sudo chmod 755 ~/SkyInstallScriptSecondary.sh;
-sudo sh ~/SkyInstallScriptSecondary.sh && exit
-EOF
+
+for i in 192.168.4.{22..25}; do ssh_inijection $i; done
+
+
 
 
 
